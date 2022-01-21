@@ -47,7 +47,7 @@ class Rect {
 
     public intersects(r: Rect): boolean {
         let c = this.center, cr = r.center;
-        let a = Math.abs(c.x - cr.x) >= (this.size.width + r.size.width) / 2 || Math.abs(c.y - cr.y) > - (this.size.height + r.size.height) / 2;
+        let a = Math.abs(c.x - cr.x) > (this.size.width + r.size.width) / 2 || Math.abs(c.y - cr.y) > (this.size.height + r.size.height) / 2;
         return !a;
     }
 }
@@ -103,7 +103,7 @@ class MaxRect {
         return this.rect!.containsRect(r.rect!);
     }
 
-    public saveOrigin(origin: Vec2): boolean {
+    public sameOrigin(origin: Vec2): boolean {
         return this.rect!.origin.equals(origin);
     }
 }
@@ -165,7 +165,7 @@ export class MaxRects {
 
     private _getRectByOrigin(origin: Vec2, remove = true): MaxRect | undefined {
         for (let i = 0, n = this._rects.length; i < n; i++) {
-            if (this._rects[i].saveOrigin(origin)) {
+            if (this._rects[i].sameOrigin(origin)) {
                 if (remove)
                     return this._rects.splice(i, 1)[0];
                 return this._rects[i];

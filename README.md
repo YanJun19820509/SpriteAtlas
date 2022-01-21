@@ -16,6 +16,11 @@ ss：需要生成图片的字符串数组
 css：css样式表
 output：图片保存目录
 
+Atlas.createAtlas(srcPath: string, output: string, name = 'spriteAtlas')
+srcPath：散图目录
+output：合图输出目录
+name：合图名称，默认spriteAtlas
+
 # CSS样式表内容如下
 font-family: tf.TTF;
 color: #FF00FF;

@@ -18,7 +18,7 @@ export namespace Text2Png {
         }
         ss.forEach(s => {
             let svg: any = createSvg(s, css);
-            console.log(svg);
+            // console.log(svg);
             svg2png(svg).then(buffer => {
                 images(buffer).save(`${output}/${s}.png`);
             });
@@ -111,9 +111,9 @@ export namespace Text2Png {
     }
 }
 
-// Text2Png.createPng(['haha'], `
-// font-family: tf.TTF;
-// color: #FF00FF;
-// opacity: 0.3;
-// text-stroke: 2px #464A57;
-// `, '.');
+Text2Png.createPng(['确定','取消','领取','前往'], `
+font-family: tf.TTF;
+color: #FF00FF;
+opacity: 0.3;
+text-stroke: 2px #464A57;
+`, '1');
