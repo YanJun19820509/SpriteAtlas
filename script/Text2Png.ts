@@ -41,6 +41,7 @@ export namespace Text2Png {
             y: 0,
             fontSize: a.fontSize,
             anchor: 'top',
+            kerning: false,
             attributes: attributes
         };
         let t2s = TextToSVG.loadSync(font);
@@ -112,8 +113,9 @@ export namespace Text2Png {
 }
 
 Text2Png.createPng(['确定','取消','领取','前往'], `
+font-size: 20px;
 font-family: tf.TTF;
-color: #FF00FF;
-opacity: 0.3;
-text-stroke: 2px #464A57;
+color: #FFFFFF;
+opacity: 1;
+text-stroke: 2px #000000;
 `, '1');
