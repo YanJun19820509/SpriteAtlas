@@ -1,22 +1,41 @@
-// import fs from 'fs';
-// import images from 'images';
+import fs from 'fs';
+import images from 'images';
 import TextToSVG from 'text-to-svg';
 import svg2png from "svg2png";
 
 export namespace Text2Png {
 
-    export function createPng(s: string, css: string) {
-        let svg = createSvg(s, css);
-        let buffer = svg2png(svg)
+    /**
+     *
+     * @param ss
+     * @param css
+     * @param output 输出目录
+     */
+    export function createPng(ss: string[], css: string, output: string) {
+        if (!fs.existsSync(output)) {
+            console.error('输出目录不存在：', output);
+            return;
+        }
+        ss.forEach(s => {
+            let svg: any = createSvg(s, css);
+            console.log(svg);
+            svg2png(svg).then(buffer => {
+                images(buffer).save(`${output}/${s}.png`);
+            });
+        });
     }
 
     function createSvg(s: string, css: string): string {
         let a = parse(css);
         let font = a.fontFamily;
-        let attributes = {
-            fill: a.color,
-            stroke: a.stroke.color
+        let attributes: any = {
+            fill: a.color
         };
+        if (a.stroke) {
+            attributes['stroke'] = a.stroke.color;
+            attributes['stroke-width'] = a.stroke.width;
+        }
+        if (a.opacity) attributes['fill-opacity'] = a.opacity;
         let options: TextToSVG.GenerationOptions = {
             x: 0,
             y: 0,
@@ -28,6 +47,15 @@ export namespace Text2Png {
         return t2s.getSVG(s, options);
     }
 
+    // width: 22px;
+    // height: 14px;
+    // font-size: 18px;
+    // font-family: Source Han Serif CN;
+    // font-weight: 800;
+    // color: #FFFFFF;
+    // line-height: 32px;
+    // -webkit-text-stroke: 2px #464A57;
+    // text-stroke: 2px #464A57;
     function parse(s: string): any {
         s = s.replace(new RegExp('\n|\r|px|', 'g'), '');
         let a = s.split(';');
@@ -43,7 +71,7 @@ export namespace Text2Png {
                     r.fontFamily = c[1];
                     break;
                 case 'font-weight':
-                    r.enableBold = c[1] == 'bold';
+                    r.fontWeight = c[1];
                     break;
                 case 'color':
                     r.color = c[1];
@@ -53,6 +81,9 @@ export namespace Text2Png {
                     break;
                 case 'text-stroke':
                     r.stroke = parseStroke(c[1]);
+                    break;
+                case 'opacity':
+                    r.opacity = Number(c[1]);
                     break;
             }
         });
@@ -79,3 +110,10 @@ export namespace Text2Png {
         };
     }
 }
+
+// Text2Png.createPng(['haha'], `
+// font-family: tf.TTF;
+// color: #FF00FF;
+// opacity: 0.3;
+// text-stroke: 2px #464A57;
+// `, '.');
